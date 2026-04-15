@@ -1,4 +1,74 @@
-﻿<script src="https://giscus.app/client.js"
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>留言板 · Giscus</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f5f5f5;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            padding: 2rem 1rem;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            overflow: hidden;
+            padding: 2rem 1.5rem;
+        }
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: #1a1a2e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .sub {
+            color: #586069;
+            border-left: 3px solid #3b82f6;
+            padding-left: 12px;
+            margin: 0.75rem 0 1.8rem 0;
+            font-size: 0.9rem;
+        }
+        .giscus-wrapper {
+            margin-top: 1rem;
+        }
+        hr {
+            margin: 1rem 0;
+            border: none;
+            border-top: 1px solid #eaeef2;
+        }
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: #8b949e;
+        }
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .container { padding: 1.5rem; }
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>💬 留言板</h1>
+    <div class="sub">基于 GitHub Discussions · 欢迎留下你的想法</div>
+    <!-- Giscus 评论组件容器（脚本会自动在此处生成界面） -->
+    <div class="giscus-wrapper"></div>
+    <script src="https://giscus.app/client.js"
         data-repo="r3111453/Giscus"
         data-repo-id="R_kgDOSDhjjw"
         data-category="Announcements"
@@ -12,4 +82,9 @@
         data-lang="zh-CN"
         crossorigin="anonymous"
         async>
-</script>
+    </script>
+    <hr />
+    <footer>使用 Giscus 驱动 | 需要 GitHub 账号登录后留言</footer>
+</div>
+</body>
+</html>
