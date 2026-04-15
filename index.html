@@ -96,7 +96,7 @@
             .visitor-badge { align-self: flex-start; }
         }
     </style>
-    <!-- 引入不蒜子计数器 (busuanzi) 用于展示总访问量（无法防刷，仅作参考） -->
+    <!-- 引入不蒜子计数器 (busuanzi) 用于展示总访问量（刷新会增加） -->
     <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </head>
 <body>
@@ -106,7 +106,7 @@
         <div class="visitor-badge">
             <span class="visitor-item">🌐 总访问量: <span id="busuanzi_value_site_pv" class="visitor-number">加载中...</span></span>
             <span class="visitor-item">📄 本页访问: <span id="busuanzi_value_page_pv" class="visitor-number">加载中...</span></span>
-            <span class="visitor-item">👤 真实访客: <span id="uniqueVisitorCount" class="visitor-number">加载中...</span></span>
+            <span class="visitor-item">👤 真实访客: <img src="https://count.getloli.com/get/@r3111453?theme=gelbooru" alt="Moe Counter" style="height:20px;"></span>
         </div>
     </div>
     <div class="sub">基于 GitHub Discussions · 欢迎留下你的想法</div>
@@ -128,51 +128,11 @@
         async>
     </script>
     <hr />
-    <footer>使用 Giscus 驱动 | 需要 GitHub 账号登录后留言 | 总访问量由 不蒜子 提供（刷新会增加） | 真实访客计数基于浏览器记录</footer>
+    <footer>使用 Giscus 驱动 | 需要 GitHub 账号登录后留言 | 总访问量由 不蒜子 提供（刷新会增加）</footer>
 </div>
 
 <script>
-    // 真实访客计数器（使用 localStorage + CountAPI，每个浏览器只计一次）
-    (function() {
-        const storageKey = 'unique_visitor_counted';
-        const namespace = 'giscus_board_unique';
-        const pageKey = window.location.hostname + window.location.pathname;  // 以域名+路径作为标识
-        const encodedKey = encodeURIComponent(pageKey);
-        
-        // 显示真实访客数量的元素
-        const uniqueSpan = document.getElementById('uniqueVisitorCount');
-        if (!uniqueSpan) return;
-
-        // 先获取当前真实访客数量（只获取，不增加）
-        const getUrl = `https://api.countapi.xyz/get/${namespace}/${encodedKey}`;
-        fetch(getUrl)
-            .then(res => res.ok ? res.json() : Promise.reject('API error'))
-            .then(data => {
-                const count = data.value || 0;
-                uniqueSpan.textContent = count;
-            })
-            .catch(err => {
-                console.warn('获取真实访客数失败:', err);
-                uniqueSpan.textContent = '暂不可用';
-            });
-
-        // 检查本地存储，如果未计数过则调用 hit 接口增加计数
-        const alreadyCounted = localStorage.getItem(storageKey);
-        if (!alreadyCounted) {
-            const hitUrl = `https://api.countapi.xyz/hit/${namespace}/${encodedKey}`;
-            fetch(hitUrl)
-                .then(res => res.ok ? res.json() : Promise.reject('hit failed'))
-                .then(data => {
-                    // 更新显示最新数量
-                    uniqueSpan.textContent = data.value;
-                    // 标记已计数
-                    localStorage.setItem(storageKey, 'true');
-                })
-                .catch(err => console.warn('真实访客计数失败:', err));
-        }
-    })();
-
-    // 不蒜子加载失败的友好提示（可选）
+    // 不蒜子加载失败的友好提示
     setTimeout(function() {
         var sitePv = document.getElementById('busuanzi_value_site_pv');
         var pagePv = document.getElementById('busuanzi_value_page_pv');
