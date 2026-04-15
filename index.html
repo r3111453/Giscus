@@ -25,53 +25,20 @@
             overflow: hidden;
             padding: 2rem 1.5rem;
         }
-        .header-area {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 0.75rem;
-        }
         h1 {
             font-size: 1.8rem;
             font-weight: 600;
+            margin-bottom: 0.25rem;
             color: #1a1a2e;
             display: flex;
             align-items: center;
             gap: 8px;
-            margin: 0;
-        }
-        .visitor-badge {
-            background: #f0f2f5;
-            border-radius: 40px;
-            padding: 4px 12px;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .visitor-item {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .visitor-number {
-            font-weight: 600;
-            color: #2c3e66;
-            background: white;
-            padding: 0 6px;
-            border-radius: 20px;
-            min-width: 40px;
-            display: inline-block;
-            text-align: center;
         }
         .sub {
             color: #586069;
             border-left: 3px solid #3b82f6;
             padding-left: 12px;
-            margin: 0.5rem 0 1.8rem 0;
+            margin: 0.75rem 0 1.8rem 0;
             font-size: 0.9rem;
         }
         .giscus-wrapper {
@@ -92,23 +59,15 @@
             body { padding: 1rem; }
             .container { padding: 1.5rem; }
             h1 { font-size: 1.5rem; }
-            .header-area { flex-direction: column; align-items: flex-start; }
-            .visitor-badge { align-self: flex-start; }
         }
     </style>
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </head>
 <body>
 <div class="container">
-    <div class="header-area">
-        <h1>💬 留言板</h1>
-        <div class="visitor-badge">
-            <span class="visitor-item">🌐 总访问量: <span id="busuanzi_value_site_pv" class="visitor-number">加载中...</span></span>
-            <span class="visitor-item">📄 本页访问: <span id="busuanzi_value_page_pv" class="visitor-number">加载中...</span></span>
-            <span class="visitor-item">👤 真实访客: <span id="uniqueVisitorCount" class="visitor-number">加载中...</span></span>
-        </div>
-    </div>
+    <h1>💬 留言板</h1>
     <div class="sub">基于 GitHub Discussions · 欢迎留下你的想法</div>
+
+    <!-- Giscus 评论组件 -->
     <div class="giscus-wrapper"></div>
     <script src="https://giscus.app/client.js"
         data-repo="r3111453/Giscus"
@@ -126,61 +85,7 @@
         async>
     </script>
     <hr />
-    <footer>使用 Giscus 驱动 | 需要 GitHub 账号登录后留言 | 总访问量由 不蒜子 提供（刷新会增加）</footer>
+    <footer>使用 Giscus 驱动 | 需要 GitHub 账号登录后留言</footer>
 </div>
-
-<script>
-    // 不蒜子加载失败的友好提示
-    setTimeout(function() {
-        var sitePv = document.getElementById('busuanzi_value_site_pv');
-        var pagePv = document.getElementById('busuanzi_value_page_pv');
-        if (sitePv && sitePv.innerText === '加载中...') {
-            sitePv.innerText = '暂不可用';
-            pagePv.innerText = '暂不可用';
-        }
-    }, 2000);
-
-    // 真实访客计数器（纯数字，使用 localStorage + CountAPI，每个浏览器只计一次）
-    (function() {
-        const storageKey = 'unique_visitor_counted_v2';
-        const namespace = 'giscus_board_unique_v2';
-        const pageKey = window.location.hostname + window.location.pathname;
-        const encodedKey = encodeURIComponent(pageKey);
-        const uniqueSpan = document.getElementById('uniqueVisitorCount');
-        if (!uniqueSpan) return;
-
-        // 先显示缓存中的数字（如果有）
-        const cached = localStorage.getItem('cached_visitor_count');
-        if (cached) uniqueSpan.textContent = cached;
-
-        // 获取当前真实访客数量（只获取，不增加）
-        const getUrl = `https://api.countapi.xyz/get/${namespace}/${encodedKey}`;
-        fetch(getUrl, { cache: 'no-store' })
-            .then(res => res.ok ? res.json() : Promise.reject('API error'))
-            .then(data => {
-                const count = data.value || 0;
-                uniqueSpan.textContent = count;
-                localStorage.setItem('cached_visitor_count', count);
-            })
-            .catch(err => {
-                console.warn('获取真实访客数失败:', err);
-                if (!cached) uniqueSpan.textContent = '暂不可用';
-            });
-
-        // 检查本地存储，如果未计数过则调用 hit 接口增加计数
-        const alreadyCounted = localStorage.getItem(storageKey);
-        if (!alreadyCounted) {
-            const hitUrl = `https://api.countapi.xyz/hit/${namespace}/${encodedKey}`;
-            fetch(hitUrl, { method: 'GET', cache: 'no-store' })
-                .then(res => res.ok ? res.json() : Promise.reject('hit failed'))
-                .then(data => {
-                    uniqueSpan.textContent = data.value;
-                    localStorage.setItem(storageKey, 'true');
-                    localStorage.setItem('cached_visitor_count', data.value);
-                })
-                .catch(err => console.warn('真实访客计数失败:', err));
-        }
-    })();
-</script>
 </body>
 </html>
