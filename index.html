@@ -49,16 +49,24 @@
             font-size: 0.85rem;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 12px;
             white-space: nowrap;
+            flex-wrap: wrap;
         }
-        .visitor-badge .count-number {
+        .visitor-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .visitor-number {
             font-weight: 600;
             color: #2c3e66;
             background: white;
             padding: 0 6px;
             border-radius: 20px;
-            margin-left: 4px;
+            min-width: 40px;
+            display: inline-block;
+            text-align: center;
         }
         .sub {
             color: #586069;
@@ -86,18 +94,19 @@
             .container { padding: 1.5rem; }
             h1 { font-size: 1.5rem; }
             .header-area { flex-direction: column; align-items: flex-start; }
-            .visitor-badge { align-self: flex-start; }
+            .visitor-badge { align-self: flex-start; white-space: normal; }
         }
     </style>
+    <!-- 引入不蒜子计数器 (busuanzi) -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </head>
 <body>
 <div class="container">
     <div class="header-area">
         <h1>💬 留言板</h1>
-        <!-- 访客计数器：使用 CountAPI 动态获取 -->
-        <div class="visitor-badge" id="visitorCounter">
-            <span>👀 访问量</span>
-            <span id="visitCount" class="count-number">加载中...</span>
+        <div class="visitor-badge">
+            <span class="visitor-item">🌐 总访问量: <span id="busuanzi_value_site_pv" class="visitor-number">加载中...</span></span>
+            <span class="visitor-item">📄 本页访问: <span id="busuanzi_value_page_pv" class="visitor-number">加载中...</span></span>
         </div>
     </div>
     <div class="sub">基于 GitHub Discussions · 欢迎留下你的想法</div>
@@ -120,39 +129,20 @@
         async>
     </script>
     <hr />
-    <footer>使用 Giscus 驱动 | 需要 GitHub 账号登录后留言</footer>
+    <footer>使用 Giscus 驱动 | 需要 GitHub 账号登录后留言 | 访问统计由 不蒜子 提供</footer>
 </div>
 
+<!-- 不蒜子脚本可能加载失败时的友好提示（可选） -->
 <script>
-    (function() {
-        // 使用 CountAPI 免费计数服务
-        // 为当前页面生成唯一标识（使用完整 URL 作为 key，确保不同页面独立计数）
-        var pageKey = window.location.href;   // 完整 URL
-        // 但因为 URL 可能包含特殊字符，需要编码
-        var encodedKey = encodeURIComponent(pageKey);
-        // 使用固定 namespace，避免冲突
-        var namespace = 'giscus_board';
-        // 计数 API 地址（每次访问 +1，并返回最新计数）
-        var apiUrl = 'https://api.countapi.xyz/hit/' + namespace + '/' + encodedKey;
-        
-        var countSpan = document.getElementById('visitCount');
-        if (!countSpan) return;
-        
-        fetch(apiUrl)
-            .then(response => {
-                if (!response.ok) throw new Error('HTTP error ' + response.status);
-                return response.json();
-            })
-            .then(data => {
-                // data.value 即为当前访问次数
-                var count = data.value;
-                countSpan.textContent = count;
-            })
-            .catch(error => {
-                console.warn('计数器加载失败:', error);
-                countSpan.textContent = '暂不可用';
-            });
-    })();
+    // 检测不蒜子是否成功加载，若2秒后busuanzi_value_site_pv仍为"加载中..."，则显示暂不可用
+    setTimeout(function() {
+        var sitePv = document.getElementById('busuanzi_value_site_pv');
+        var pagePv = document.getElementById('busuanzi_value_page_pv');
+        if (sitePv && sitePv.innerText === '加载中...') {
+            sitePv.innerText = '暂不可用';
+            pagePv.innerText = '暂不可用';
+        }
+    }, 2000);
 </script>
 </body>
 </html>
