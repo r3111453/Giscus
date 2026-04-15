@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -25,20 +25,43 @@
             overflow: hidden;
             padding: 2rem 1.5rem;
         }
+        .header-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
         h1 {
             font-size: 1.8rem;
             font-weight: 600;
-            margin-bottom: 0.25rem;
             color: #1a1a2e;
             display: flex;
             align-items: center;
             gap: 8px;
+            margin: 0;
+        }
+        .visitor-badge {
+            background: #f0f2f5;
+            border-radius: 40px;
+            padding: 4px 12px;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+        .visitor-badge img {
+            height: 20px;
+            vertical-align: middle;
+            border-radius: 20px;
         }
         .sub {
             color: #586069;
             border-left: 3px solid #3b82f6;
             padding-left: 12px;
-            margin: 0.75rem 0 1.8rem 0;
+            margin: 0.5rem 0 1.8rem 0;
             font-size: 0.9rem;
         }
         .giscus-wrapper {
@@ -59,14 +82,24 @@
             body { padding: 1rem; }
             .container { padding: 1.5rem; }
             h1 { font-size: 1.5rem; }
+            .header-area { flex-direction: column; align-items: flex-start; }
+            .visitor-badge { align-self: flex-start; }
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>💬 留言板</h1>
+    <div class="header-area">
+        <h1>💬 留言板</h1>
+        <!-- 访客计数器：动态获取当前页面地址 -->
+        <div class="visitor-badge" id="visitorCounter">
+            <span>👀 访问量</span>
+            <img id="hitImage" alt="visitor count" style="height:20px;">
+        </div>
+    </div>
     <div class="sub">基于 GitHub Discussions · 欢迎留下你的想法</div>
-    <!-- Giscus 评论组件容器（脚本会自动在此处生成界面） -->
+
+    <!-- Giscus 评论组件容器 -->
     <div class="giscus-wrapper"></div>
     <script src="https://giscus.app/client.js"
         data-repo="r3111453/Giscus"
@@ -86,5 +119,26 @@
     <hr />
     <footer>使用 Giscus 驱动 | 需要 GitHub 账号登录后留言</footer>
 </div>
+
+<script>
+    // 使用 hits.seeyoufarm.com 服务生成访客计数（免费、无需注册）
+    // 自动获取当前页面的完整 URL 作为唯一标识，部署到任何域名都能独立计数
+    (function() {
+        var pageUrl = window.location.href;
+        // 对 URL 进行编码，用作统计标识
+        var encodedUrl = encodeURIComponent(pageUrl);
+        // 计数器图片地址（该服务会自动增加并返回带数字的徽章）
+        var counterUrl = "https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=" + encodedUrl + "&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=views&edge_flat=false";
+        // 更新 img 标签的 src
+        var imgEl = document.getElementById('hitImage');
+        if (imgEl) {
+            imgEl.src = counterUrl;
+            // 可选：如果图片加载失败，显示占位文本
+            imgEl.onerror = function() {
+                this.parentElement.innerHTML = '👀 访问计数暂不可用';
+            };
+        }
+    })();
+</script>
 </body>
 </html>
